@@ -38,7 +38,6 @@ function displayInfo() {
     // $("#current-no").html(game.currentNo);
 }
 export function loadNumbers(highestNo) {
-    console.log(winH);
     let circles = [];
     for (let i = 1; i <= highestNo; i++) {
         let circle = createNumber(i);

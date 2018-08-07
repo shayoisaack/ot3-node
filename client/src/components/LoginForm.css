@@ -1,0 +1,25 @@
+.LoginForm{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    background: rgba(0,0,0,0.4);
+}
+
+.input{
+    padding: 10px;
+    margin-bottom: 12px;
+    outline: none;
+    border: none;
+    text-decoration: none;
+    border-radius: 0;
+}
+
+.LoginFormInput{
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    margin-top: -40px;
+    filter: blur(0);
+}

@@ -23,7 +23,7 @@ class Circles extends Component {
     }
   render() {
     return (
-      <div className="Circles">
+      <div className="Circles" style={{height: (winH - 51)+"px"}}>
           {this.state.circles.map(customer => 
             <Circle key={customer.id} number={customer.id} x={customer.x+"%"} y={customer.y+"%"}/>
           )}

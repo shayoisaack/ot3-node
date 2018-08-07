@@ -1,0 +1,7 @@
+.Button{
+    padding: 10px;
+    background: #222;
+    color: white;
+    min-width: 100px;
+    text-align: center;
+}

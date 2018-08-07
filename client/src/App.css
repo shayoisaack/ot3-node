@@ -27,3 +27,16 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.Login .Circles{
+  filter: blur(4px);
+}
+
+.blurred{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0,0,0,0.4);
+  filter: blur(4px);
+}
