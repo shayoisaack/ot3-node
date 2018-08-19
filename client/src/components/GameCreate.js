@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import Button from './Button';
 import {setCookie, getCookie, eraseCookie} from '../lib.js';
+import socketIOClient from 'socket.io-client';
 
 var winH = window.innerHeight;
 var winW = window.innerWidth;
+
+const socket = socketIOClient('http://localhost:5000');
 
 class GameCreate extends Component {
     constructor() {
@@ -15,27 +18,22 @@ class GameCreate extends Component {
     componentDidMount() {
     }
   render() {
+    socket.on('gamecreate', (game) => {
+      console.log('game:', game);
+      this.setState({
+        game: game
+      });
+      setCookie('gameId', game.id);
+      window.location = '/gamewait';
+    });
     return (
-      <div className="GameCreate" style={{position: 'absolute', width: '100%', textAlign: 'center'}}>
-        <Button text='Create new game' style={{backgroundColor: 'green', width: '180px', position: 'absolute', left: '25%', marginTop: '10px'}} onClick={env => this.createNewGame(env)}/>
-      </div>
+        <Button text='Create new game' style={{backgroundColor: 'green', width: '180px', margin: 'auto'}} onClick={env => this.createNewGame(env)}/>
     );
   }
 
   createNewGame(env){
     console.log(getCookie('uid'));
-    fetch('http://localhost:5000/gamecreate?uid='+getCookie('uid'),{
-      method: 'GET',
-      credentials: 'include'
-    })
-    .then(res => res.json())
-    .then(game => {
-      console.log(game);
-      this.setState({
-          game: game
-      });
-      window.location = '/gamewait'
-    });
+    socket.emit('gamecreate', getCookie('uid'));
   }
 }
 

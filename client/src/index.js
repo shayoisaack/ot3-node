@@ -11,9 +11,9 @@ import GameWait from './pages/GameWait';
 render((
     <Router>
         <Switch>
-                <Route exact path='/' component={App} />
+                <Route exact path='/' component={Login} />
                 <Route path='/games' component={Games} />
-                <Route path='/login' component={Login} />
+                {/* <Route path='/login' component={Login} /> */}
                 <Route path='/gamewait' component={GameWait} />
 </Switch>
 </Router>), 

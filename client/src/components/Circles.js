@@ -19,7 +19,7 @@ class Circles extends Component {
       console.log(highestNumber);
       let circles = loadNumbers(highestNumber);
       this.setState({circles: circles});
-      console.log(circles);
+      //console.log(circles);
     }
   render() {
     return (

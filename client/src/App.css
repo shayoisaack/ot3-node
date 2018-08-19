@@ -40,3 +40,10 @@
   background: rgba(0,0,0,0.4);
   filter: blur(4px);
 }
+
+.mainBox{
+  position: absolute;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}

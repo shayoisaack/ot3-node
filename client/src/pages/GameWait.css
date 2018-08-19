@@ -1,0 +1,30 @@
+.gameCreator{
+    width: 100%;
+    text-align: left;
+    font-size: 1.2em;
+    color: white;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.PlayerList{
+    color: white;
+}
+
+.GameWaitBox{
+    padding: 10px;
+}
+
+.GameWaitStartButton{
+    margin-bottom: 10px;
+}
+
+.TextTitle{
+    font-size: 1.2em;
+    color: white;
+    margin: 10px 0;
+}
+
+.PlayerListItem{
+    margin-bottom: 10px;
+}

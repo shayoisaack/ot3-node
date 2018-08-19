@@ -1,4 +1,13 @@
 .Header{
     height: 50px;
     background: #222;
+    color: white;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.headerItem{
+    color: white;
+    line-height: 50px;
+    float: right;
 }
