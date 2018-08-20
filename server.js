@@ -30,11 +30,11 @@ app.use(session);
 // Use shared session middleware for socket.io
 // setting autoSave:true
 io.use(sharedsession(session, {
-  autoSave:true
-})); 
+  autoSave: true
+}));
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set('trust proxy', 1) // trust first proxy
 // app.use(session({
@@ -83,11 +83,11 @@ app.get('/test-login', (req, res) => {
   req.session.userName = req.query.userName;
   //req.session.save();
   console.log('userName:', req.query.userName);
-  res.send({userName: req.query.userName})
+  res.send({ userName: req.query.userName })
 });
 
 app.get('/login', (req, res) => {
-  let user ={
+  let user = {
     uid: uuid(),
     userName: req.query.userName
   };
@@ -104,25 +104,25 @@ app.get('/login', (req, res) => {
 
 app.get('/test-login-check', (req, res) => {
   console.log('userName-check', req.session.userName);
-  res.send({userName: req.session.userName});
+  res.send({ userName: req.session.userName });
 });
 
 io.on('connection', socket => {
   //console.log('user connected:', socket.id);
 
-  users[socket.id] = {
-    uid: socket.id
-  };
-  socket.emit('user-connected', socket.id);
+  if (socket.handshake.session.uid)
+    users[socket.handshake.session.uid].sid = socket.id;
 
-  socket.on('login-check', uid => (function(socket){
+  socket.emit('user-connected', null);
+
+  socket.on('login-check', uid => (function (socket) {
     //console.log('sessions: login-check:', socket.handshake.session.uid, socket.handshake.session.userName);
     //console.log('login-check: uid', uid);
-    if(socket.handshake.session.uid){
+    if (socket.handshake.session.uid) {
       //console.log('login-check: pass', socket.handshake.session.uid);
       socket.emit('login-check', socket.handshake.session.userName);
     }
-    else{
+    else {
       //console.log('login-check: fail', uid);
       io.sockets.emit('login-check', null);
     }
@@ -132,15 +132,16 @@ io.on('connection', socket => {
     //console.log('sessions: gamecreate:', socket.handshake.session.uid, socket.handshake.session.userName);
     let game = {
       id: uuid(),
-      creatorId: uid,
+      creatorId: socket.handshake.session.uid,
       creatorName: socket.handshake.session.userName,
-      players: [users[socket.handshake.session.uid]]
+      players: {}
     }
+    game.players[socket.handshake.session.uid] = users[socket.handshake.session.uid];
     // games[uid] = game;
     games.push(game);
 
     console.log('gamecreate', game);
-    socket.emit('gamecreate', game); 
+    socket.emit('gamecreate', game);
     io.sockets.emit('gameslist-get', games);
   });
 
@@ -174,21 +175,22 @@ io.on('connection', socket => {
   socket.on('gameslist-join', (obj) => {
     console.log('gameslist-join: entering');
     let game = null;
-    for(let j = 0; j < games.length; j++){
-      if(games[j].id === obj.gameId){
-        games[j].players.push(users[socket.handshake.session.uid]);
-        console.log('gameslist-join: added player:', games[j].players);
+    for (let j = 0; j < games.length; j++) {
+      if (games[j].id === obj.gameId) {
+        games[j].players[socket.handshake.session.uid] = users[socket.handshake.session.uid];
+        console.log('added player to game:', games[j].players);
         game = games[j];
         break;
       }
     }
     //let game = getGame(games, obj.gameId);
     console.log('user joining game:', obj.uid, game);
-    //socket.emit('gameslist-join', game);
-    for(let i = 0; i < game.players.length; i++){
-      console.log('playerlist-get to:', game.players[i]);
-      io.to(game.players[i].uid).emit('playerlist-get', game.players);
-    }
+    socket.emit('gameslist-join', game);
+    Object.keys(game.players).map( (uid, index) => {
+      console.log('playerlist-get: sending playerlist list to:', game.players[uid]);
+      io.to(game.players[uid].sid).emit('playerlist-get', game.players);
+      console.log('socket id check:', socket.id === game.players[uid].sid);
+    });
   });
 
   socket.on('disconnect', () => {

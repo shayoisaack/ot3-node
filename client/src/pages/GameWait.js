@@ -52,12 +52,16 @@ class GameWait extends Component {
                     <Header />
                     <div className="GameWaitBox">
                         <div className='gameCreator'>{this.state.game.creatorName}'s game</div>
-                        <Button className="GameWaitStartButton" text='Start game' style={{ width: '180px', left: '25%' }} />
+                        <Button className="GameWaitStartButton" text='Start game' style={{ width: '180px', left: '25%' }} onClick={evt => this.startGame(evt)} />
                         <PlayerList />
                     </div>
                 </div>
             </div>
         );
+    }
+
+    startGame(evt) {
+        console.log('starting game:', this.state.game);
     }
 }
 

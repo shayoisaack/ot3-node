@@ -33,13 +33,17 @@ class GamesList extends Component {
     return (
       <div className="GamesList" style={{ height: (winH - 51) + "px" }}>
         {this.state.games.map(game =>
-          <div className="gamesListItem"><span>{game.creatorName}'s game</span><Button gameId={game.id} onClick={env => this.joinGame(env, game)} text='Play' style={{ width: '100px', float: 'right', padding: '3px' }} /></div>
+          <div className="gamesListItem">
+            <span>{game.creatorName}'s game</span>
+            <Button gameId={game.id} onClick={env => this.joinGame(env, game)} text='Play' style={{ width: '100px', float: 'right', padding: '3px' }} />
+          </div>
         )}
       </div>
     );
   }
 
   joinGame(env, game) {
+    console.log('joining game: ', game);
     socket.emit('gameslist-join', { uid: getCookie('uid'), gameId: game.id });
   }
 }

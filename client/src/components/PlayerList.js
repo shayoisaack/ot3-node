@@ -27,8 +27,8 @@ class PlayerList extends Component {
                 <div className="TextTitle">Players:</div>
                 <ol>
                 {
-                    this.state.players.map(player =>
-                        <li className="PlayerListItem" dataid={player.uid}>{player.userName}</li>)
+                    Object.keys(this.state.players).map((uid, index) =>
+                        <li className="PlayerListItem" dataid={this.state.players[uid]}>{this.state.players[uid].userName}</li>)
                 }
                 </ol>
             </div>
