@@ -111,11 +111,11 @@ io.on('connection', socket => {
   //console.log('user connected:', socket.id);
 
   if (socket.handshake.session.uid){
-    console.log('session logged for:', socket.id);
+    //console.log('session logged for:', socket.id);
     users[socket.handshake.session.uid].sid = socket.id;
   }
   else
-    console.log('session not logged for: ', socket.id);
+    //console.log('session not logged for: ', socket.id);
 
   socket.emit('user-connected', null);
 
