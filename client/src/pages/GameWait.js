@@ -36,11 +36,9 @@ class GameWait extends Component {
             });
         });
 
-        socket.on('gamewait-getgame-other', (game) => {
-            console.log('getgame-other:', game);
-            this.state.setState({
-                game: game
-            });
+        socket.on('gamewait-startgame', (game) => {
+            console.log('starting game:', game);
+            window.location = '/play';
         });
 
         return (
@@ -61,7 +59,8 @@ class GameWait extends Component {
     }
 
     startGame(evt) {
-        console.log('starting game:', this.state.game);
+        //console.log('starting game:', this.state.game);
+        socket.emit('gamewait-startgame', this.state.game);
     }
 }
 

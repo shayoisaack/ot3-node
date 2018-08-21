@@ -3,7 +3,7 @@ import ReactDOM, { render } from 'react-dom';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import App from './App';
+import Play from './pages/Play';
 import Login from './pages/Login';
 import Games from './pages/Games';
 import GameWait from './pages/GameWait';
@@ -15,6 +15,7 @@ render((
                 <Route path='/games' component={Games} />
                 {/* <Route path='/login' component={Login} /> */}
                 <Route path='/gamewait' component={GameWait} />
+                <Route path='/play' component={Play} />
 </Switch>
 </Router>), 
     document.getElementById('root'));

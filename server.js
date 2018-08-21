@@ -193,6 +193,15 @@ io.on('connection', socket => {
     });
   });
 
+  socket.on('gamewait-startgame', gameObj => {
+    console.log('starting game:', gameObj);
+    let game = getGame(games, gameObj.id);
+    Object.keys(game.players).map((uid, index) => {
+      io.to(game.players[uid].sid).emit('gamewait-startgame', game);
+      console.log('starting game for:', game.players[uid].userName);
+    });
+  });
+
   socket.on('disconnect', () => {
     //console.log('user disconnected')
   });
