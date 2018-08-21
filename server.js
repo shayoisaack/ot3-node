@@ -110,8 +110,12 @@ app.get('/test-login-check', (req, res) => {
 io.on('connection', socket => {
   //console.log('user connected:', socket.id);
 
-  if (socket.handshake.session.uid)
+  if (socket.handshake.session.uid){
+    console.log('session logged for:', socket.id);
     users[socket.handshake.session.uid].sid = socket.id;
+  }
+  else
+    console.log('session not logged for: ', socket.id);
 
   socket.emit('user-connected', null);
 
@@ -186,7 +190,7 @@ io.on('connection', socket => {
     //let game = getGame(games, obj.gameId);
     console.log('user joining game:', obj.uid, game);
     socket.emit('gameslist-join', game);
-    Object.keys(game.players).map( (uid, index) => {
+    Object.keys(game.players).map((uid, index) => {
       console.log('playerlist-get: sending playerlist list to:', game.players[uid]);
       io.to(game.players[uid].sid).emit('playerlist-get', game.players);
       console.log('socket id check:', socket.id === game.players[uid].sid);
@@ -197,8 +201,8 @@ io.on('connection', socket => {
     console.log('starting game:', gameObj);
     let game = getGame(games, gameObj.id);
     Object.keys(game.players).map((uid, index) => {
-      io.to(game.players[uid].sid).emit('gamewait-startgame', game);
-      console.log('starting game for:', game.players[uid].userName);
+      io.sockets.emit('gamewait-startgame', game);
+      console.log('starting game for:', users[uid]);
     });
   });
 
