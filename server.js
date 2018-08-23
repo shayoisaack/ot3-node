@@ -93,7 +93,11 @@ app.get('/login', (req, res) => {
   let user = {
     uid: uuid(),
     userName: req.query.userName,
-    color: getRandomColor()
+    color: getRandomColor(),
+    leaderboard: {
+      points: 0,
+      won: 0
+    }
   };
   users[user.uid] = user;
 
@@ -146,7 +150,8 @@ io.on('connection', socket => {
       currentNumber: 0,
       winH: Infinity,
       winW: Infinity,
-      seed: new Date().getTime()
+      seed: new Date().getTime(),
+      over: false
     }
     game.players[socket.handshake.session.uid] = users[socket.handshake.session.uid];
     // games[uid] = game;
@@ -234,8 +239,24 @@ io.on('connection', socket => {
 
   });
 
+  socket.on('circlesplay-leaderboard-set', game => {
+    let serverGame = getGame(games, game.id);
+    if (!serverGame.over) {
+      Object.keys(game.players).map((uid, index) => {
+        users[uid].leaderboard.points += game.players[uid].points;
+        if (game.players[uid].won)
+          users[uid].leaderboard.won++;
+      });
+      serverGame.over = true;
+      console.log('games after adding points:', games);
+    }
+    else{
+      console.log('already added points');
+    }
+  });
+
   socket.on('leaderboardlist-get', () => {
-    
+
   });
 
   socket.on('disconnect', () => {
