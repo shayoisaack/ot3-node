@@ -234,6 +234,10 @@ io.on('connection', socket => {
 
   });
 
+  socket.on('leaderboardlist-get', () => {
+    
+  });
+
   socket.on('disconnect', () => {
     //console.log('user disconnected')
   });

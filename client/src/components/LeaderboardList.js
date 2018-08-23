@@ -14,6 +14,8 @@ class LeaderboardList extends Component {
         }
     }
     componentDidMount() {
+        socket.emit('leaderboardlist-get', {});
+        socket.on('leadeboardlist-get', list => {});
     }
     render() {
 
