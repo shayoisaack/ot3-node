@@ -250,13 +250,28 @@ io.on('connection', socket => {
       serverGame.over = true;
       console.log('games after adding points:', games);
     }
-    else{
+    else {
       console.log('already added points');
     }
   });
 
-  socket.on('leaderboardlist-get', () => {
+  socket.on('leaderboardlist-get', (obj) => {
+    console.log('getting leaderboard list');
+    let list = [];
+    Object.keys(users).map((uid, index) => {
+       let row = {
+         uid: uid,
+         userName: users[uid].userName,
+         points: users[uid].leaderboard.points,
+         won: users[uid].leaderboard.won
+       }
 
+       list.push(row);
+    });
+    list.sort((a, b) => {
+      return (a.points < b.points) ? 1 : ((b.points < a.points) ? -1 : 0);
+    });
+    socket.emit('leaderboardlist-get', list);
   });
 
   socket.on('disconnect', () => {

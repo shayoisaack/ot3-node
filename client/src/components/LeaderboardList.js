@@ -11,34 +11,36 @@ class LeaderboardList extends Component {
     constructor() {
         super();
         this.state = {
+            list: []
         }
     }
     componentDidMount() {
         socket.emit('leaderboardlist-get', {});
-        socket.on('leadeboardlist-get', list => {});
+        socket.on('leaderboardlist-get', list => {
+            console.log('list:', list);
+            this.setState({list: list});
+        });
     }
     render() {
-
-
         return (
             <div className="overlay" style={{ height: (window.innerHeight - 51) + 'px' }}>
                 <div className="results row">
-                    <span>The winner is</span>
-                    {/* <h1>{this.state.end.winner.userName}</h1> */}
-                    <div>Ranking:</div>
+                    <h1>Leaderboard</h1>
                     <table className="Ranking">
                         <tr>
                             <th>Rank</th>
                             <th>Name</th>
-                            <th>Score</th>
+                            <th>Win</th>
+                            <th>Points</th>
                         </tr>
-                        {/* {this.state.end.rankedPlayers.map((player, index) =>
+                        {this.state.list.map((row, index) =>
                             <tr>
                                 <td>{index + 1}</td>
-                                <td>{player.userName}</td>
-                                <td>{player.score}</td>
+                                <td dataId={row.uid}>{row.userName}</td>
+                                <td>{row.won}</td>
+                                <td>{row.points}</td>
                             </tr>
-                        )} */}
+                        )}
                     </table>
                 </div>
             </div>
