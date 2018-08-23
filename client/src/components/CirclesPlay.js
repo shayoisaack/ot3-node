@@ -4,6 +4,7 @@ import Circle from './Circle';
 import { findHighestNo, loadNumbers } from '../load_game.js';
 import { getCookie, playerInGame, link } from '../lib';
 import socketIOClient from 'socket.io-client';
+import Button from './Button';
 
 const socket = socketIOClient(link);
 
@@ -61,7 +62,8 @@ class Circles extends Component {
       state.circles[obj.game.currentNumber - 1].color = state.game.players[obj.playerId].color;
 
       //console.log(obj.game.currentNumber, this.state.circles.length + 1);
-      if (obj.game.currentNumber >= this.state.circles.length) {
+      if (obj.game.currentNumber >= 3) {
+      //if (obj.game.currentNumber >= this.state.circles.length) {
         console.log('game has ended');
         state.end.show = true;
         let winningScore = 0;
@@ -116,6 +118,7 @@ class Circles extends Component {
                   </tr>
                 )}
               </table>
+              <a href='/leaderboard' style={{textDecoration: 'none'}}><Button text="Go to Leaderboard" style={{backgroundColor: this.state.end.winner.color, marginTop: '12px'}}/></a>
             </div>
           </div>
           : null
