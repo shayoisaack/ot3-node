@@ -1,6 +1,6 @@
 var winH = window.innerHeight;
 var winW = window.innerWidth;
-var seed = new Date().getTime();
+var seed;
 var game;
 
 function loadInfo() {
@@ -37,7 +37,13 @@ function displayInfo() {
     // $("#opp2-name .circle").css("background-color", game.color2);
     // $("#current-no").html(game.currentNo);
 }
-export function loadNumbers(highestNo) {
+export function loadNumbers(highestNo, seedGiven, gWinH, gWinW) {
+    if (seedGiven)
+        seed = seedGiven;
+    if (gWinH)
+        winH = gWinH;
+    if (gWinW)
+        winW = gWinW;
     let circles = [];
     for (let i = 1; i <= highestNo; i++) {
         let circle = createNumber(i);
@@ -48,7 +54,8 @@ export function loadNumbers(highestNo) {
 }
 function createNumber(i) {
     let circle = {
-      id: i
+        id: i,
+        color: '#777777'
     }
     return circle;
     // var num = document.createElement("div");
@@ -67,7 +74,7 @@ function addNumber(circle, circles) {
     arrXY = avoidOthers(arrXY, circles);
     x = arrXY[0] * 100;
     y = arrXY[1] * 100;
-    
+
     circle.x = x;
     circle.y = y;
 
@@ -114,6 +121,7 @@ function closeToOthers(arrXY, circles) {
     return false;
 }
 function random() {
+    //console.log('seed:', seed);
     var x = Math.sin(seed++) * 10000;
     return x - Math.floor(x);
 }

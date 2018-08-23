@@ -6,7 +6,7 @@ import socketIOClient from 'socket.io-client';
 var winH = window.innerHeight;
 var winW = window.innerWidth;
 
-const socket = socketIOClient('http://localhost:5000');
+const socket = socketIOClient('http://172.20.10.4:5000');
 
 class GameCreate extends Component {
   constructor() {

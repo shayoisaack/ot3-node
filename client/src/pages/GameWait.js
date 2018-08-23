@@ -10,7 +10,7 @@ import './GameWait.css';
 import Button from '../components/Button';
 import PlayerList from '../components/PlayerList';
 
-const socket = socketIOClient('http://localhost:5000');
+const socket = socketIOClient('http://172.20.10.4:5000');
 
 class GameWait extends Component {
     constructor() {
@@ -21,8 +21,10 @@ class GameWait extends Component {
         };
     }
     componentDidMount() {
-        if (getCookie('gameId') !== null)
+        if (getCookie('gameId') !== null){
             socket.emit('gamewait-getgame', getCookie('gameId'));
+            socket.emit('set-window', {winH: window.innerHeight, winW: window.innerWidth, gameId: getCookie('gameId')});
+        }
         else
             console.log('no games to wait for');
     }

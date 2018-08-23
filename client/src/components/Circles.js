@@ -5,6 +5,7 @@ import {findHighestNo, loadNumbers} from '../load_game.js';
 
 var winH = window.innerHeight;
 var winW = window.innerWidth;
+let seed = new Date().getTime();
 
 class Circles extends Component {
     constructor() {
@@ -17,7 +18,7 @@ class Circles extends Component {
       console.log(winH, winW);
       let highestNumber = findHighestNo(winH, winW);
       console.log(highestNumber);
-      let circles = loadNumbers(highestNumber);
+      let circles = loadNumbers(highestNumber, seed);
       this.setState({circles: circles});
       //console.log(circles);
     }

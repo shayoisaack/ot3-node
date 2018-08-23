@@ -17,6 +17,7 @@ export function getCookie(name) {
     }
     return null;
 }
+
 export function eraseCookie(name) {   
     document.cookie = name+'=; Max-Age=-99999999;';  
 }
@@ -27,4 +28,13 @@ export function getGame(games, creatorId){
             return game;
         }
     });
+}
+
+export function playerInGame(game, playerId){
+    let flag = false;
+    Object.keys(game.players).forEach((uid) => {
+        if(uid === playerId)
+            flag = true;
+    });
+    return flag;
 }

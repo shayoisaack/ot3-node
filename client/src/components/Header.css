@@ -11,3 +11,8 @@
     line-height: 50px;
     float: right;
 }
+
+.playerScoreItem{
+    margin-right: 4px;
+    box-sizing: border-box;
+}

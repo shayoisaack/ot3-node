@@ -7,4 +7,21 @@ function getGame(games, gameId){
     return null;
 }
 
+var seed = new Date().getTime();
+
+function random() {
+    let x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+}
+
+function getRandomColor(){
+    let letters = '0123456789ABCDEF';
+    let color = '#';
+    for(let i = 0; i < 6; i++){
+        color += letters[Math.floor(random()*16)];
+    }
+    return color;
+}
+
 exports.getGame = getGame;
+exports.getRandomColor = getRandomColor;

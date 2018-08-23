@@ -11,7 +11,7 @@ class PlayerList extends Component {
     }
 
     componentDidMount() {
-        const socket = socketIOClient('http://localhost:5000');
+        const socket = socketIOClient('http://172.20.10.4:5000');
 
         socket.emit('playerlist-get', getCookie('gameId'));
 

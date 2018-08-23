@@ -18,8 +18,13 @@
 
 .LoginFormInput{
     position: absolute;
-    top: 50%;
-    left: 25%;
+    top: 45%;
+    left: 50%;
     margin-top: -40px;
     filter: blur(0);
+}
+
+.logo{
+    color: white;
+    text-align: center;
 }

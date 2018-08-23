@@ -7,6 +7,7 @@ const socketIO = require('socket.io');
 const http = require('http');
 var bodyParser = require('body-parser');
 const getGame = require('./serverlib.js').getGame;
+const getRandomColor = require('./serverlib.js').getRandomColor;
 //var sessionstore = require('sessionstore');
 //var sessionStore = sessionstore.createSessionStore();
 //var RedisStore = require('connect-redis')(sess);
@@ -46,10 +47,11 @@ app.set('trust proxy', 1) // trust first proxy
 
 let users = [];
 let games = [];
+let colors = ['red', 'blue', 'green', 'yellow', 'brown'];
 
 app.all('*', (req, res, next) => {
   res.header('Access-Control-Allow-Credentials', true);
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Origin", "http://172.20.10.4:3000");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
@@ -89,7 +91,8 @@ app.get('/test-login', (req, res) => {
 app.get('/login', (req, res) => {
   let user = {
     uid: uuid(),
-    userName: req.query.userName
+    userName: req.query.userName,
+    color: getRandomColor()
   };
   users[user.uid] = user;
 
@@ -110,14 +113,14 @@ app.get('/test-login-check', (req, res) => {
 io.on('connection', socket => {
   //console.log('user connected:', socket.id);
 
-  if (socket.handshake.session.uid){
+  if (socket.handshake.session.uid) {
     //console.log('session logged for:', socket.id);
     users[socket.handshake.session.uid].sid = socket.id;
   }
   else
     //console.log('session not logged for: ', socket.id);
 
-  socket.emit('user-connected', null);
+    socket.emit('user-connected', null);
 
   socket.on('login-check', uid => (function (socket) {
     //console.log('sessions: login-check:', socket.handshake.session.uid, socket.handshake.session.userName);
@@ -138,7 +141,11 @@ io.on('connection', socket => {
       id: uuid(),
       creatorId: socket.handshake.session.uid,
       creatorName: socket.handshake.session.userName,
-      players: {}
+      players: {},
+      currentNumber: 0,
+      winH: Infinity,
+      winW: Infinity,
+      seed: new Date().getTime()
     }
     game.players[socket.handshake.session.uid] = users[socket.handshake.session.uid];
     // games[uid] = game;
@@ -152,14 +159,6 @@ io.on('connection', socket => {
   socket.on('gamewait-getgame', (gameId) => {
     //console.log('getgame:', getGame(games, gameId));
     socket.emit('gamewait-getgame', getGame(games, gameId));
-  });
-
-  socket.on('gamewait-getgame-other', (obj) => {
-    for (let i = 0; i < games.length; i++) {
-      if (games[i].id === obj.gameId) {
-        io.sockets.emit('gamewait-getgame-other', games[i]);
-      }
-    }
   });
 
   socket.on('playerlist-join', (uid) => {
@@ -197,13 +196,41 @@ io.on('connection', socket => {
     });
   });
 
+  socket.on('set-window', obj => {
+    let game = getGame(games, obj.gameId);
+    if (obj.winH < game.winH)
+      game.winH = obj.winH;
+    if (obj.winW < game.winW)
+      game.winW = obj.winW;
+  });
+
   socket.on('gamewait-startgame', gameObj => {
     console.log('starting game:', gameObj);
     let game = getGame(games, gameObj.id);
-    Object.keys(game.players).map((uid, index) => {
-      io.sockets.emit('gamewait-startgame', game);
-      console.log('starting game for:', users[uid]);
-    });
+    //Object.keys(game.players).map((uid, index) => {
+    io.sockets.emit('gamewait-startgame', game);
+    //console.log('starting game for:', users[uid]);
+    //});
+  });
+
+  socket.on('play', obj => {
+    console.log('play:', obj);
+    let game = getGame(games, obj.gameId);
+
+    console.log('game:', game);
+
+    if ((obj.number === game.currentNumber + 1)) {//if pressed correct following number
+      game.currentNumber++;
+      obj.game = game;
+      obj.playerId = socket.handshake.session.uid;
+      //Object.keys(game.players).map((uid, index) => {
+      io.sockets.emit('play', obj);
+      io.sockets.emit('play-update-score', obj);
+      io.sockets.emit('play-update-next-number', obj);
+      //});
+      console.log(users[obj.playerId].userName + ' pressed right number, ', game.currentNumber);
+    }
+
   });
 
   socket.on('disconnect', () => {

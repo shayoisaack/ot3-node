@@ -9,7 +9,7 @@ class Circle extends Component {
     }
   render() {
     return (
-      <div className="Circle" style={{left: this.props.x, top: this.props.y}}>
+      <div className="Circle" onClick={this.props.onClick} style={{left: this.props.x, top: this.props.y, backgroundColor: this.props.color}}>
         {this.props.number}
       </div>
     );

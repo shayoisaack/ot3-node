@@ -1,0 +1,132 @@
+import React, { Component } from 'react';
+import './Circles.css';
+import Circle from './Circle';
+import { findHighestNo, loadNumbers } from '../load_game.js';
+import { getCookie, playerInGame } from '../lib';
+import socketIOClient from 'socket.io-client';
+
+const socket = socketIOClient('http://172.20.10.4:5000');
+
+let winH = window.innerHeight;
+let winW = window.innerWidth;
+
+class Circles extends Component {
+  constructor() {
+    super();
+    this.state = {
+      circles: [],
+      game: {
+        winH: winH,
+        winW: winW
+      },
+      end: {
+        winner: {},
+        show: false,
+        rankedPlayers: []
+      }
+    };
+  }
+  componentDidMount() {
+    socket.emit('gamewait-getgame', getCookie('gameId'));
+
+    socket.on('gamewait-getgame', (game) => {
+      game.winH -= 51;
+      //set player scores to zero
+      Object.keys(game.players).map((uid, index) => {
+        game.players[uid].score = 0;
+      });
+
+      let state = JSON.parse(JSON.stringify(this.state));
+      console.log('window:', game.winH, game.winW);
+
+      //load circles
+      let highestNumber = findHighestNo(game.winH, game.winW);
+      console.log(highestNumber);
+      let circles = loadNumbers(highestNumber, game.seed, game.winH, game.winW);
+      state.circles = circles;
+
+      //update state with game
+      state.game = game;
+      this.setState(state);
+    });
+
+    socket.on('play', obj => {
+      if (!playerInGame(obj.game, getCookie('uid')))
+        return;
+
+      //update game current nubmer & player scores
+      let state = JSON.parse(JSON.stringify(this.state));
+      state.game.currentNumber = obj.game.currentNumber;
+      state.game.players[obj.playerId].score++;
+      state.circles[obj.game.currentNumber - 1].color = state.game.players[obj.playerId].color;
+
+      //console.log(obj.game.currentNumber, this.state.circles.length + 1);
+      if (obj.game.currentNumber >= this.state.circles.length) {
+        console.log('game has ended');
+        state.end.show = true;
+        let winningScore = 0;
+        let winner = {};
+        let rankedPlayers = [];
+        Object.keys(state.game.players).map((uid, index) => {
+          let player = state.game.players[uid];
+          if (player.score > winningScore) {
+            winningScore = player.score;
+            winner = player;
+          }
+
+          rankedPlayers.push(player);
+        });
+        state.end.winner = winner;
+
+        rankedPlayers.sort((a, b) => {
+          return (a.score < b.score) ? 1 : ((b.score < a.score) ? -1 : 0);
+        });
+        state.end.rankedPlayers = rankedPlayers;
+      }
+      this.setState(state);
+    });
+  }
+  render() {
+
+
+    return (
+      <div>
+        <div className={this.state.end.show ? "blur Circles" : "Circles"} style={{ height: (this.state.game.winH) + "px", width: this.state.game.winW +"px" }}>
+          {this.state.circles.map(circle =>
+            <Circle onClick={evt => this.play(evt, circle)} key={circle.id} number={circle.id} x={circle.x + "%"} y={circle.y + "%"} color={circle.color} />
+          )}
+        </div>
+        {this.state.end.show ?
+          <div className="overlay" style={{ height: (winH - 51) + 'px' }}>
+            <div className="results row">
+              <span>The winner is</span>
+              <h1>{this.state.end.winner.userName}</h1>
+              <div>Ranking:</div>
+              <table className="Ranking">
+                <tr>
+                  <th>Rank</th>
+                  <th>Name</th>
+                  <th>Score</th>
+                </tr>
+                {this.state.end.rankedPlayers.map((player, index) => 
+                  <tr>
+                    <td>{index+1}</td>
+                    <td>{player.userName}</td>
+                    <td>{player.score}</td>
+                  </tr>
+                )}
+              </table>
+            </div>
+          </div>
+          : null
+        }
+      </div>
+    );
+  }
+
+  play(evt, circle) {
+    socket.emit('play', { gameId: getCookie('gameId'), number: circle.id });
+  }
+}
+
+export default Circles;

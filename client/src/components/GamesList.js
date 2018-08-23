@@ -3,7 +3,7 @@ import { getCookie, setCookie } from '../lib';
 import socketIOClient from 'socket.io-client';
 import './GamesList.css';
 import Button from './Button';
-const socket = socketIOClient('http://localhost:5000');
+const socket = socketIOClient('http://172.20.10.4:5000');
 
 var winH = window.innerHeight;
 var winW = window.innerWidth;

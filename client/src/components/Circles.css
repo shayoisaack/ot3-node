@@ -1,3 +1,34 @@
 .Circles{
     position: relative;
+    margin: auto;
+    box-sizing: border-box;
+}
+
+.results{
+    color: white;
+}
+
+.Ranking{
+    width: 100%;
+    margin-top: 12px;
+    box-sizing: border-box;
+}
+
+.Ranking tr:nth-child(even){
+    /* background-color: #f2f2f2; */
+}
+
+.Ranking td, .Ranking th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.Ranking th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    /* text-align: left;
+    background-color: #4CAF50;
+    color: white; */
+    font-weight: bold;
 }

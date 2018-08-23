@@ -3,7 +3,7 @@ import './Header.css';
 import socketIOClient from 'socket.io-client';
 import { getCookie } from '../lib';
 
-const socket = socketIOClient('http://localhost:5000');
+const socket = socketIOClient('http://172.20.10.4:5000');
 
 class Header extends Component {
   constructor() {

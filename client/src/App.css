@@ -41,9 +41,32 @@
   filter: blur(4px);
 }
 
+.blur{
+  background: rgba(0,0,0,0.4);
+  filter: blur(4px);
+}
+
+.overlay{
+  position: absolute;
+  top: 51px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
 .mainBox{
   position: absolute;
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
+}
+
+.Left{
+  float: left;
+}
+
+.row{
+  max-width: 300px;
+  margin: auto;
+  padding: 10px;
 }
