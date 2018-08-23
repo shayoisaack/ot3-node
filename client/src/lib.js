@@ -38,3 +38,6 @@ export function playerInGame(game, playerId){
     });
     return flag;
 }
+
+//export let link = 'http://172.20.10.4:5000';
+export let link = 'http://localhost:5000';

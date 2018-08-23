@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import '../App.css';
 import './Header.css';
 import socketIOClient from 'socket.io-client';
-import { getCookie, playerInGame } from '../lib';
+import { getCookie, playerInGame, link } from '../lib';
 
-const socket = socketIOClient('http://172.20.10.4:5000');
+const socket = socketIOClient(link);
 
 console.log('inside header play');
 

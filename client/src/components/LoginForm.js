@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import './LoginForm.css';
 import Button from './Button';
-import { setCookie, getCookie, eraseCookie } from '../lib.js';
+import { setCookie, getCookie, eraseCookie, link } from '../lib.js';
 import socketIOClient from 'socket.io-client';
 
-const socket = socketIOClient('http://172.20.10.4:5000');
+const socket = socketIOClient(link);
 
 var winH = window.innerHeight;
 var winW = window.innerWidth;
@@ -20,7 +20,7 @@ class LoginForm extends Component {
   }
   addUserHandler(evt) {
     console.log(this.state.userName);
-    fetch('http://172.20.10.4:5000/login?userName=' + this.state.userName, {
+    fetch(link+'/login?userName=' + this.state.userName, {
       method: 'GET',
       credentials: 'include'
     })

@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import './Circles.css';
 import Circle from './Circle';
 import { findHighestNo, loadNumbers } from '../load_game.js';
-import { getCookie, playerInGame } from '../lib';
+import { getCookie, playerInGame, link } from '../lib';
 import socketIOClient from 'socket.io-client';
 
-const socket = socketIOClient('http://172.20.10.4:5000');
+const socket = socketIOClient(link);
 
 let winH = window.innerHeight;
 let winW = window.innerWidth;

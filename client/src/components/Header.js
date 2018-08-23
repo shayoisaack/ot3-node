@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import './Header.css';
 import socketIOClient from 'socket.io-client';
-import { getCookie } from '../lib';
+import { getCookie, link } from '../lib';
 
-const socket = socketIOClient('http://172.20.10.4:5000');
+const socket = socketIOClient(link);
 
 class Header extends Component {
   constructor() {

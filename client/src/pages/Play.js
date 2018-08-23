@@ -4,10 +4,10 @@ import '../App.css';
 import HeaderPlay from '../components/HeaderPlay';
 import CirclesPlay from '../components/CirclesPlay';
 import socketIOClient from 'socket.io-client';
-import { getCookie } from '../lib';
+import { getCookie, link } from '../lib';
 import './Play.css';
 
-const socket = socketIOClient('http://172.20.10.4:5000');
+const socket = socketIOClient(link);
 
 class App extends Component {
     constructor() {

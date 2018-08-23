@@ -8,6 +8,7 @@ const http = require('http');
 var bodyParser = require('body-parser');
 const getGame = require('./serverlib.js').getGame;
 const getRandomColor = require('./serverlib.js').getRandomColor;
+const link = require('./serverlib.js').link;
 //var sessionstore = require('sessionstore');
 //var sessionStore = sessionstore.createSessionStore();
 //var RedisStore = require('connect-redis')(sess);
@@ -51,7 +52,7 @@ let colors = ['red', 'blue', 'green', 'yellow', 'brown'];
 
 app.all('*', (req, res, next) => {
   res.header('Access-Control-Allow-Credentials', true);
-  res.header("Access-Control-Allow-Origin", "http://172.20.10.4:3000");
+  res.header("Access-Control-Allow-Origin", link);
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });

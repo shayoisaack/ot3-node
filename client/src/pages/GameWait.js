@@ -5,12 +5,12 @@ import Circles from '../components/Circles';
 //import GamesList from '../components/GamesList';
 import GameCreate from '../components/GameCreate';
 import socketIOClient from 'socket.io-client';
-import { getCookie } from '../lib';
+import { getCookie, link } from '../lib';
 import './GameWait.css';
 import Button from '../components/Button';
 import PlayerList from '../components/PlayerList';
 
-const socket = socketIOClient('http://172.20.10.4:5000');
+const socket = socketIOClient(link);
 
 class GameWait extends Component {
     constructor() {

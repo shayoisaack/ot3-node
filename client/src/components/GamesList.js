@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { getCookie, setCookie } from '../lib';
+import { getCookie, setCookie, link } from '../lib';
 import socketIOClient from 'socket.io-client';
 import './GamesList.css';
 import Button from './Button';
-const socket = socketIOClient('http://172.20.10.4:5000');
+const socket = socketIOClient(link);
 
 var winH = window.innerHeight;
 var winW = window.innerWidth;

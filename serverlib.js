@@ -23,5 +23,8 @@ function getRandomColor(){
     return color;
 }
 
+let link = 'http://localhost:3000';
+
 exports.getGame = getGame;
 exports.getRandomColor = getRandomColor;
+exports.link = link;
