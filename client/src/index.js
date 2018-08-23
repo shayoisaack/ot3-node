@@ -7,6 +7,7 @@ import Play from './pages/Play';
 import Login from './pages/Login';
 import Games from './pages/Games';
 import GameWait from './pages/GameWait';
+import Leaderboard from './pages/Leaderboard';
 
 render((
     <Router>
@@ -16,6 +17,7 @@ render((
                 {/* <Route path='/login' component={Login} /> */}
                 <Route path='/gamewait' component={GameWait} />
                 <Route path='/play' component={Play} />
+                <Route path='/leaderboard' component={Leaderboard} />
 </Switch>
 </Router>), 
     document.getElementById('root'));

@@ -93,7 +93,11 @@ app.get('/login', (req, res) => {
   let user = {
     uid: uuid(),
     userName: req.query.userName,
-    color: getRandomColor()
+    color: getRandomColor(),
+    leaderboard: {
+      points: 0,
+      won: 0
+    }
   };
   users[user.uid] = user;
 
@@ -146,7 +150,8 @@ io.on('connection', socket => {
       currentNumber: 0,
       winH: Infinity,
       winW: Infinity,
-      seed: new Date().getTime()
+      seed: new Date().getTime(),
+      over: false
     }
     game.players[socket.handshake.session.uid] = users[socket.handshake.session.uid];
     // games[uid] = game;
@@ -232,6 +237,41 @@ io.on('connection', socket => {
       console.log(users[obj.playerId].userName + ' pressed right number, ', game.currentNumber);
     }
 
+  });
+
+  socket.on('circlesplay-leaderboard-set', game => {
+    let serverGame = getGame(games, game.id);
+    if (!serverGame.over) {
+      Object.keys(game.players).map((uid, index) => {
+        users[uid].leaderboard.points += game.players[uid].points;
+        if (game.players[uid].won)
+          users[uid].leaderboard.won++;
+      });
+      serverGame.over = true;
+      console.log('games after adding points:', games);
+    }
+    else {
+      console.log('already added points');
+    }
+  });
+
+  socket.on('leaderboardlist-get', (obj) => {
+    console.log('getting leaderboard list');
+    let list = [];
+    Object.keys(users).map((uid, index) => {
+       let row = {
+         uid: uid,
+         userName: users[uid].userName,
+         points: users[uid].leaderboard.points,
+         won: users[uid].leaderboard.won
+       }
+
+       list.push(row);
+    });
+    list.sort((a, b) => {
+      return (a.points < b.points) ? 1 : ((b.points < a.points) ? -1 : 0);
+    });
+    socket.emit('leaderboardlist-get', list);
   });
 
   socket.on('disconnect', () => {

@@ -77,8 +77,20 @@ class Circles extends Component {
           }
 
           rankedPlayers.push(player);
+
+          //calculate points for each player
+          let points = 5//5 points for participation
+          points += player.score//score TODO: score * number of players
+          player.points = points;
         });
         state.end.winner = winner;
+
+        winner.points += 50;//50 points for winning
+        winner.won = true;
+        console.log('gameover:', state.game.players);
+
+        //commit points to server
+        socket.emit('circlesplay-leaderboard-set', state.game);
 
         rankedPlayers.sort((a, b) => {
           return (a.score < b.score) ? 1 : ((b.score < a.score) ? -1 : 0);
