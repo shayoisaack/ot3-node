@@ -62,8 +62,8 @@ class Circles extends Component {
       state.circles[obj.game.currentNumber - 1].color = state.game.players[obj.playerId].color;
 
       //console.log(obj.game.currentNumber, this.state.circles.length + 1);
-      if (obj.game.currentNumber >= 3) {
-      //if (obj.game.currentNumber >= this.state.circles.length) {
+      //if (obj.game.currentNumber >= 3) {
+      if (obj.game.currentNumber >= this.state.circles.length) {
         console.log('game has ended');
         state.end.show = true;
         let winningScore = 0;
